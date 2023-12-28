@@ -1,8 +1,8 @@
-[![Rendered image](https://raw.githubusercontent.com/co3moz/minecraft-render/master/docs/soul_campfire_small.png)](https://github.com/co3moz/minecraft-render/blob/master/docs/soul_campfire.png)
-
+![](https://raw.githubusercontent.com/co3moz/minecraft-render/master/docs/soul_campfire_small.png)
+![](https://raw.githubusercontent.com/TradeCraftMC/TradeCraft/main/src/main/resources/web/banner.png)
 minecraft-render
 =======================
-
+Maintained by TradeCraft
 
 Renders minecraft block models from .jar file using `THREE.js`. 
 Default output format is PNG `1000x1000`.
