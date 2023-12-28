@@ -1,5 +1,5 @@
 ![](https://raw.githubusercontent.com/co3moz/minecraft-render/master/docs/soul_campfire_small.png)
-![](https://github.com/TradeCraftMC/TradeCraft/blob/main/src/main/resources/web/favicon.png?raw=true)
+
 minecraft-render
 =======================
 Maintained by TradeCraft
