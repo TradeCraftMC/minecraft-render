@@ -46,6 +46,7 @@ export async function prepareRenderer({
     alpha: true,
     logarithmicDepthBuffer: true,
   });
+  renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
 
   Logger.trace(() => `WebGL initialized`);
 
@@ -60,15 +61,6 @@ export async function prepareRenderer({
     0.01,
     20000
   );
-
-  const light = new THREE.DirectionalLight(0xffffff, 0.6);
-  light.position.set(-15, 30, -25); // cube directions x => negative:bottom right, y => positive:top, z => negative:bottom left
-  scene.add(light);
-
-  const global = new THREE.AmbientLight(0xffffff, 0.6);
-  scene.add(global)
-
-  Logger.trace(() => `Light added to scene`);
 
   if (plane) {
     const origin = new THREE.Vector3(0, 0, 0);
@@ -339,16 +331,13 @@ async function constructTextureMaterial(
   texture.magFilter = THREE.NearestFilter;
   texture.minFilter = THREE.NearestFilter;
   texture.needsUpdate = true;
+  texture.colorSpace = THREE.LinearSRGBColorSpace;
 
   Logger.trace(() => `Face[${direction}] texture is ready`);
 
-  return new THREE.MeshStandardMaterial({
+  return new THREE.MeshBasicMaterial({
     map: texture,
-    color: 0xffffff,
     transparent: true,
-    roughness: 1,
-    metalness: 0,
-    emissive: 1,
     alphaTest: 0.1,
   });
 }
