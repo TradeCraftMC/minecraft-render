@@ -61,9 +61,12 @@ export async function prepareRenderer({
     20000
   );
 
-  const light = new THREE.DirectionalLight(0xffffff, 1.2);
+  const light = new THREE.DirectionalLight(0xffffff, 0.6);
   light.position.set(-15, 30, -25); // cube directions x => negative:bottom right, y => positive:top, z => negative:bottom left
   scene.add(light);
+
+  const global = new THREE.AmbientLight(0xffffff, 0.6);
+  scene.add(global)
 
   Logger.trace(() => `Light added to scene`);
 
@@ -339,10 +342,13 @@ async function constructTextureMaterial(
 
   Logger.trace(() => `Face[${direction}] texture is ready`);
 
-  return new THREE.MeshBasicMaterial({
+  return new THREE.MeshStandardMaterial({
     map: texture,
     color: 0xffffff,
     transparent: true,
+    roughness: 1,
+    metalness: 0,
+    emissive: 1,
     alphaTest: 0.1,
   });
 }
