@@ -14,7 +14,7 @@ export class DownloadTest {
     this.checkExistingJar();
     const response = await fetch(`https://launchermeta.mojang.com/mc/game/version_manifest.json`)
     const manifest: VersionManifest = await response.json();
-    this.targetVersionUrl = manifest.versions.find(version => version.type == 'release' || version.id == this.targetVersion || version.id == manifest.latest.release)!.url;
+    this.targetVersionUrl = manifest.versions.find((version) => version.id == this.targetVersion)!.url;
   }
 
   @Spec()
