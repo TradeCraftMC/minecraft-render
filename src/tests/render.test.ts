@@ -23,7 +23,9 @@ export class RenderTest {
         continue;
       }
 
-      const filePath = path.resolve(__dirname, `../../test-data/${process.env.RENDER_FOLDER || ''}${render.blockName}.png`);
+      const renderName = render.blockName?.substring(render.blockName.indexOf('/'));
+
+      const filePath = path.resolve(__dirname, `../../test-data/${process.env.RENDER_FOLDER || ''}${renderName}.png`);
 
       await writeAsync(filePath, render.buffer);
     }

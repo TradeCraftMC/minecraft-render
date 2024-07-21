@@ -1,11 +1,16 @@
 import { destroyRenderer, prepareRenderer, render } from "./render";
 import { Jar } from "./utils/jar";
-import type { AnimationMeta, BlockModel, Renderer, RendererOptions } from "./utils/types";
+import type {
+  AnimationMeta,
+  BlockModel,
+  Renderer,
+  RendererOptions,
+} from "./utils/types";
 //@ts-ignore
-import * as deepAssign from 'assign-deep';
+import * as deepAssign from "assign-deep";
 
 export class Minecraft {
-  protected jar: Jar
+  protected jar: Jar;
   protected renderer!: Renderer | null;
   protected _cache: { [key: string]: any } = {};
 
@@ -21,23 +26,27 @@ export class Minecraft {
     return new Minecraft(file);
   }
 
-  async getBlockNameList(): Promise<string[]> {
-    return (await this.jar.entries('assets/minecraft/models/block'))
-      .filter(entry => entry.name.endsWith(".json"))
-      .map(entry => entry.name.slice('assets/minecraft/models/block/'.length, -('.json'.length)));
+  async getModelList(): Promise<string[]> {
+    return (await this.jar.entries("assets/minecraft/models/block"))
+      .filter((entry) => entry.name.endsWith(".json"))
+      .map((entry) =>
+        entry.name.slice("assets/minecraft/models/".length, -".json".length)
+      );
   }
 
   async getBlockList(): Promise<BlockModel[]> {
-    return await Promise.all((await this.getBlockNameList()).map(block => this.getModel(block)));
+    return (
+      await Promise.allSettled([
+        ...(await this.getModelList()).map((model) => this.getModel(model)),
+      ])
+    )
+      .filter((e) => e.status === "fulfilled")
+      .map((e) => (e as PromiseFulfilledResult<BlockModel>).value);
   }
 
-  async getModelFile<T = BlockModel>(name = 'block/block'): Promise<T> {
-    if (name.startsWith('minecraft:')) {
-      name = name.substring('minecraft:'.length);
-    }
-
-    if (name.indexOf('/') == -1) {
-      name = `block/${name}`;
+  async getModelFile<T = BlockModel>(name = "block/block"): Promise<T> {
+    if (name.startsWith("minecraft:")) {
+      name = name.substring("minecraft:".length);
     }
 
     const path = `assets/minecraft/models/${name}.json`;
@@ -49,16 +58,24 @@ export class Minecraft {
 
       this._cache[path] = await this.jar.readJson(path);
 
+      if (name.startsWith("item")) {
+        const parent = this._cache[path].parent;
+        if (parent.startsWith("minecraft:block")) {
+          return await this.getModelFile(parent.substring("minecraft:".length));
+        }
+        throw new Error(`No block model for item: ${path}`);
+      }
+
       return this._cache[path];
     } catch (e) {
       throw new Error(`Unable to find model file: ${path}`);
     }
   }
 
-  async getTextureFile(name: string = '') {
-    name = name ?? '';
-    if (name.startsWith('minecraft:')) {
-      name = name.substring('minecraft:'.length);
+  async getTextureFile(name: string = "") {
+    name = name ?? "";
+    if (name.startsWith("minecraft:")) {
+      name = name.substring("minecraft:".length);
     }
 
     const path = `assets/minecraft/textures/${name}.png`;
@@ -70,11 +87,10 @@ export class Minecraft {
     }
   }
 
-
-  async getTextureMetadata(name: string = ''): Promise<AnimationMeta | null> {
-    name = name ?? '';
-    if (name.startsWith('minecraft:')) {
-      name = name.substring('minecraft:'.length);
+  async getTextureMetadata(name: string = ""): Promise<AnimationMeta | null> {
+    name = name ?? "";
+    if (name.startsWith("minecraft:")) {
+      name = name.substring("minecraft:".length);
     }
 
     const path = `assets/minecraft/textures/${name}.png.mcmeta`;
@@ -119,7 +135,7 @@ export class Minecraft {
   }
 
   async prepareRenderEnvironment(options: RendererOptions = {}) {
-    this.renderer = await prepareRenderer(options)
+    this.renderer = await prepareRenderer(options);
   }
 
   async cleanupRenderEnvironment() {

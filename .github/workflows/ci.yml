@@ -13,7 +13,8 @@ jobs:
         node-version: '14'
         cache: 'npm'
     - run: npm install
-    - run: sudo apt-get install xvfb
+    - run: sudo apt-get update -y
+    - run: sudo apt-get install xvfb -y
     - run: xvfb-run --auto-servernum npm test
     - name: Archive production artifacts
       uses: actions/upload-artifact@v2
