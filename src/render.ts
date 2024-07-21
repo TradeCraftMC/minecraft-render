@@ -128,7 +128,11 @@ export async function render(
   const resultBlock: BlockModel & { buffer: Buffer; skip?: string } =
     block as any;
 
-  const gui = block.display?.gui;
+  const gui = block.display?.gui ?? {
+    rotation: [30, 225, 0],
+    translation: [0, 0, 0],
+    scale: [0.625, 0.625, 0.625],
+  };
 
   if (!gui || !block.elements || !block.textures) {
     resultBlock.skip = !gui
@@ -399,11 +403,19 @@ async function decodeFace(
   );
 }
 
-function decodeTexture(texture: string, block: BlockModel): string | null {
+function decodeTexture(
+  texture: string,
+  block: BlockModel,
+  amount = 0
+): string | null {
   texture = texture ?? "";
   if (!texture) return null;
   if (!texture.startsWith("#")) {
     return texture;
+  }
+
+  if(amount > 100){
+    return null;
   }
 
   const correctedTextureName =
@@ -413,5 +425,5 @@ function decodeTexture(texture: string, block: BlockModel): string | null {
     () => `Texture "${texture}" decoded to "${correctedTextureName}"`
   );
 
-  return decodeTexture(correctedTextureName, block);
+  return decodeTexture(correctedTextureName, block, amount + 1);
 }
