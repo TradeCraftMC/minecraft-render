@@ -82,6 +82,8 @@ export class Minecraft {
 
     try {
       return await this.jar.read(path);
+    } catch (e) {
+      return null;
     }
   }
 
