@@ -79,11 +79,16 @@ export class Minecraft {
     }
 
     const path = `assets/minecraft/textures/${name}.png`;
+    console.log("Rendering:" + name);
 
-    try {
-      return await this.jar.read(path);
-    } catch (e) {
-      throw new Error(`Unable to find texture file: ${path}`);
+    if (name === "all") {
+      console.log("Skip: all.png");
+    } else {
+      try {
+        return await this.jar.read(path);
+      } catch (e) {
+        throw new Error(`Unable to find texture file: ${path}`);
+      }
     }
   }
 
