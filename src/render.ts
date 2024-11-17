@@ -25,9 +25,9 @@ const MATERIAL_FACE_ORDER = [
 ] as const;
 
 export async function prepareRenderer({
-  width = 1000,
-  height = 1000,
-  distance = 20,
+  width = 2048,
+  height = 2048,
+  distance = 40,
   plane = 0,
   animation = true,
 }: RendererOptions): Promise<Renderer> {
