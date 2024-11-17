@@ -1,4 +1,4 @@
-name: Generate
+name: Generate2
 
 on: [push]
 
