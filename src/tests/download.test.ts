@@ -7,7 +7,7 @@ export class DownloadTest {
   private targetVersionUrl: string = '';
   private jarUrl: string = '';
   public jarPath: string = '';
-  private targetVersion: string = "1.21.0";
+  private targetVersion: string = "1.21";
 
   @Spec()
   async getManifest() {
