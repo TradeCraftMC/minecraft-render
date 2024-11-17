@@ -82,8 +82,6 @@ export class Minecraft {
 
     try {
       return await this.jar.read(path);
-    } catch (e) {
-      throw new Error(`Unable to find texture file: ${path}`);
     }
   }
 
